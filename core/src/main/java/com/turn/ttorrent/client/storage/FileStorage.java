@@ -80,6 +80,7 @@ public class FileStorage implements TorrentByteStorage {
 
 		this.raf = new RandomAccessFile(this.current, "rw");
 
+		// 修正file的length，和种子一致
 		if (file.length() != this.size) {
 			// Set the file length to the appropriate size, eventually truncating
 			// or extending the file if it already exists with a different size.

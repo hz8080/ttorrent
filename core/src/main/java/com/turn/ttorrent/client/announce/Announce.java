@@ -221,12 +221,13 @@ public class Announce implements Runnable {
 		while (!this.stop) {
 			try {
 				this.getCurrentTrackerClient().announce(event, false);
-				this.promoteCurrentTrackerClient();
+				this.promoteCurrentTrackerClient(); //成功的话把Tracker client放在首发位置
 				event = AnnounceRequestMessage.RequestEvent.NONE;
 			} catch (AnnounceException ae) {
 				logger.warn(ae.getMessage());
 
 				try {
+					// 在异常里 rotate
 					this.moveToNextTrackerClient();
 				} catch (AnnounceException e) {
 					logger.error("Unable to move to the next tracker client: {}", e.getMessage());
@@ -234,6 +235,7 @@ public class Announce implements Runnable {
 			}
 
 			try {
+				// 5 秒轮一次
 				Thread.sleep(this.interval * 1000);
 			} catch (InterruptedException ie) {
 				// Ignore

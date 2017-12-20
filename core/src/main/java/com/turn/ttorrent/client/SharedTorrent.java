@@ -223,6 +223,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 			this.piecesHashes = ByteBuffer.wrap(this.decoded_info.get("pieces")
 					.getBytes());
 
+			// piecesHashes / size_per_piece *  piece length 会 ≥ 文件总大小
 			if (this.piecesHashes.capacity() / Torrent.PIECE_HASH_SIZE *
 					(long)this.pieceLength < this.getSize()) {
 				throw new IllegalArgumentException("Torrent size does not " +
@@ -244,20 +245,24 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 			}
 
 			actual.getParentFile().mkdirs();
+			// FileStorage 存储了本地真实文件的抽象file，文件的在所有文件的偏移和文件的大小
 			files.add(new FileStorage(actual, offset, file.size));
 			offset += file.size;
 		}
+		// 存储所有文件抽象
 		this.bucket = new FileCollectionStorage(files, this.getSize());
 
 		this.stop = false;
 
 		this.uploaded = 0;
 		this.downloaded = 0;
+		// 初始化为文件大小
 		this.left = this.getSize();
 
 		this.initialized = false;
 		this.pieces = new Piece[0];
 		this.rarest = Collections.synchronizedSortedSet(new TreeSet<Piece>());
+		// 用bitSet 映射已经下载完成的、未下载的piece
 		this.completedPieces = new BitSet();
 		this.requestedPieces = new BitSet();
 
@@ -373,6 +378,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 
 		this.pieces = new Piece[nPieces];
 		this.completedPieces = new BitSet(nPieces);
+		// 初始化的时候有操作，所以进行一次clear
 		this.piecesHashes.clear();
 
 		ExecutorService executor = Executors.newFixedThreadPool(threads);
@@ -390,7 +396,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 				// situation.
 				long off = ((long)idx) * this.pieceLength;
 				long len = Math.min(
-					this.bucket.size() - off,
+					this.bucket.size() - off, // 这个公式表示，当到达最后的piece的时候可能不足一个pieceLength的大小，所以通过 this.bucket.size() - off 取到真实的 piece大小
 					this.pieceLength);
 
 				this.pieces[idx] = new Piece(this.bucket, idx, off, len, hash,

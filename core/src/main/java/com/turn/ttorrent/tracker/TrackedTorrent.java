@@ -208,9 +208,9 @@ public class TrackedTorrent extends Torrent {
 	 */
 	public TrackedPeer update(RequestEvent event, ByteBuffer peerId,
 		String hexPeerId, String ip, int port, long uploaded, long downloaded,
-		long left) throws UnsupportedEncodingException {
+		long left) {
 		TrackedPeer peer;
-		TrackedPeer.PeerState state = TrackedPeer.PeerState.UNKNOWN;
+		TrackedPeer.PeerState state;
 
 		if (RequestEvent.STARTED.equals(event)) {
 			peer = new TrackedPeer(this, ip, port, peerId);

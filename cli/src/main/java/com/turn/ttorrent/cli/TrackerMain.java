@@ -70,7 +70,7 @@ public class TrackerMain {
 		}
 
 		// Display help and exit if requested
-		if (Boolean.TRUE.equals((Boolean)parser.getOptionValue(help))) {
+		if (Boolean.TRUE.equals(parser.getOptionValue(help))) {
 			usage(System.out);
 			System.exit(0);
 		}
@@ -99,7 +99,7 @@ public class TrackerMain {
 		};
 
 		try {
-			Tracker t = new Tracker(new InetSocketAddress( portValue));
+			Tracker t = new Tracker(new InetSocketAddress(portValue));
 
 			File parent = new File(directory);
 			for (File f : parent.listFiles(filter)) {

@@ -33,16 +33,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -717,7 +708,7 @@ public class Torrent {
 	 */
 	private static String hashFile(File file, int pieceLenght)
 		throws InterruptedException, IOException, NoSuchAlgorithmException {
-		return Torrent.hashFiles(Arrays.asList(new File[] { file }), pieceLenght);
+		return Torrent.hashFiles(Collections.singletonList(file), pieceLenght);
 	}
 
 	private static String hashFiles(List<File> files, int pieceLenght)

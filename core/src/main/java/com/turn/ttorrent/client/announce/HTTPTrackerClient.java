@@ -87,6 +87,7 @@ public class HTTPTrackerClient extends TrackerClient {
 
 		URL target = null;
 		try {
+			// 生成一个发向 Tracker的请求
 			HTTPAnnounceRequestMessage request =
 				this.buildAnnounceRequest(event);
 			target = request.buildAnnounceURL(this.tracker.toURL());

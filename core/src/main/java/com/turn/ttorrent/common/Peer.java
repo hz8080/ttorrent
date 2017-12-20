@@ -190,13 +190,7 @@ public class Peer {
 	 * and peer ID if they have one).
 	 */
 	public boolean looksLike(Peer other) {
-		if (other == null) {
-			return false;
-		}
+		return other != null && this.hostId.equals(other.hostId) && (!this.hasPeerId() || this.hexPeerId.equals(other.hexPeerId));
 
-		return this.hostId.equals(other.hostId) &&
-			(this.hasPeerId()
-				 ? this.hexPeerId.equals(other.hexPeerId)
-				 : true);
 	}
 }

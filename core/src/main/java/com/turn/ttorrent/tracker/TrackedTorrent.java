@@ -272,7 +272,7 @@ public class TrackedTorrent extends Torrent {
 				continue;
 			}
 
-			// Only serve at most ANSWER_NUM_PEERS peers
+			// Only serve at most ANSWER_NUM_PEERS peers, 最大的peer提供数
 			if (count++ > this.answerPeers) {
 				break;
 			}

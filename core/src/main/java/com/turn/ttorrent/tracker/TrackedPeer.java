@@ -127,6 +127,7 @@ public class TrackedPeer extends Peer {
 	 * @param downloaded Downloaded byte count, as reported by the peer.
 	 * @param left Left-to-download byte count, as reported by the peer.
 	 */
+	/* 这里发布者应该作为一个第一个下载者下载，且下载路径必须要有一个已经有的资源使tracker判断为COMPLETED状态，这样Tracker才会维护第一个peer  */
 	public void update(PeerState state, long uploaded, long downloaded,
 			long left) {
 		if (PeerState.STARTED.equals(state) && left == 0) {
@@ -187,6 +188,7 @@ public class TrackedPeer extends Peer {
 	 * Tracker.
 	 * </p>
 	 */
+	/*30s自动移除peer*/
 	public boolean isFresh() {
 		return (this.lastAnnounce != null &&
 				(this.lastAnnounce.getTime() + (FRESH_TIME_SECONDS * 1000) >

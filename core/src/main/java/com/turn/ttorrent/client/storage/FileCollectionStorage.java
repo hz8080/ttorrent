@@ -69,6 +69,7 @@ public class FileCollectionStorage implements TorrentByteStorage {
 
 	@Override
 	public int read(ByteBuffer buffer, long offset) throws IOException {
+		// 读取的长度由buffer决定
 		int requested = buffer.remaining();
 		int bytes = 0;
 
@@ -143,7 +144,9 @@ public class FileCollectionStorage implements TorrentByteStorage {
 	private static class FileOffset {
 
 		public final FileStorage file;
+		// piece 在文件的起始偏移
 		public final long offset;
+		// piece 在文件的占用大小
 		public final long length;
 
 		FileOffset(FileStorage file, long offset, long length) {
@@ -183,22 +186,23 @@ public class FileCollectionStorage implements TorrentByteStorage {
 
 		for (FileStorage file : this.files) {
 			if (file.offset() >= offset + length) {
-				break;
+				break; // 最大偏移量比当前文件起始偏移还小 则结束循环
 			}
 
 			if (file.offset() + file.size() < offset) {
-				continue;
+				continue; // 最小偏移量比当前文件的最大偏移量还大，说明不是目标文件，继续循环
 			}
 
-			long position = offset - file.offset();
+			long position = offset - file.offset();  // 计算piece在目标文件内的偏移量
 			position = position > 0 ? position : 0;
-			long size = Math.min(
-				file.size() - position,
-				length - bytes);
+			long size = Math.min(// 文件内piece占的大小
+				file.size() - position, // |			******| 末尾部分
+				length - bytes);		// |******			  | 起始部分
 			selected.add(new FileOffset(file, position, size));
 			bytes += size;
 		}
 
+		// bytes 最终等于 length
 		if (selected.size() == 0 || bytes < length) {
 			throw new IllegalStateException("Buffer underrun (only got " +
 				bytes + " out of " + length + " byte(s) requested)!");

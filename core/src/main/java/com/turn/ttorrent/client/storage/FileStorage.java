@@ -106,7 +106,7 @@ public class FileStorage implements TorrentByteStorage {
 	}
 
 	@Override
-	public int read(ByteBuffer buffer, long offset) throws IOException {
+	public int read(ByteBuffer buffer, long offset/*文件的起始偏移量*/) throws IOException {
 		int requested = buffer.remaining();
 
 		if (offset + requested > this.size) {

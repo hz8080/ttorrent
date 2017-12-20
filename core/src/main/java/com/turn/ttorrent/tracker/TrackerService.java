@@ -149,7 +149,7 @@ public class TrackerService implements Container {
 		 * SimpleHTTP's Query map will contain UTF-8 decoded parameters, which
 		 * doesn't work well for the byte-encoded strings we expect.
 		 */
-		HTTPAnnounceRequestMessage announceRequest = null;
+		HTTPAnnounceRequestMessage announceRequest;
 		try {
 			announceRequest = this.parseQuery(request);
 		} catch (MessageValidationException mve) {
@@ -161,9 +161,9 @@ public class TrackerService implements Container {
 		// The requested torrent must be announced by the tracker.
 		TrackedTorrent torrent = this.torrents.get(
 			announceRequest.getHexInfoHash());
-		if (torrent == null) {
-			logger.warn("Requested torrent hash was: {}",
+		if (torrent == null) {			logger.warn("Requested torrent hash was: {}",
 				announceRequest.getHexInfoHash());
+
 			this.serveError(response, body, Status.BAD_REQUEST,
 				ErrorMessage.FailureReason.UNKNOWN_TORRENT);
 			return;
@@ -258,11 +258,11 @@ public class TrackerService implements Container {
 		try {
 			String uri = request.getAddress().toString();
 			for (String pair : uri.split("[?]")[1].split("&")) {
-				String[] keyval = pair.split("[=]", 2);
-				if (keyval.length == 1) {
-					this.recordParam(params, keyval[0], null);
+				String[] keyVal = pair.split("[=]", 2);
+				if (keyVal.length == 1) {
+					this.recordParam(params, keyVal[0], null);
 				} else {
-					this.recordParam(params, keyval[0], keyval[1]);
+					this.recordParam(params, keyVal[0], keyVal[1]);
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {

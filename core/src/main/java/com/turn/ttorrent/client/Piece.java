@@ -188,7 +188,7 @@ public class Piece implements Comparable<Piece> {
 	 * @throws IOException If the read can't be completed (I/O error, or EOF
 	 * reached, which can happen if the piece is not complete).
 	 */
-	private ByteBuffer _read(long offset, long length) throws IOException {
+	private ByteBuffer _read(long offset/*piece中的偏移量*/, long length/*要读的长度*/) throws IOException {
 		if (offset + length > this.length) {
 			throw new IllegalArgumentException("Piece#" + this.index +
 				" overrun (" + offset + " + " + length + " > " +
@@ -198,7 +198,7 @@ public class Piece implements Comparable<Piece> {
 		// TODO: remove cast to int when large ByteBuffer support is
 		// implemented in Java.
 		ByteBuffer buffer = ByteBuffer.allocate((int)length);
-		int bytes = this.bucket.read(buffer, this.offset + offset);
+		int bytes = this.bucket.read(buffer, this.offset/*这个piece的第一个字节在文件总长度偏移量*/ + offset/*piece中的偏移量*/);
 		buffer.rewind();
 		buffer.limit(bytes >= 0 ? bytes : 0);
 		return buffer;

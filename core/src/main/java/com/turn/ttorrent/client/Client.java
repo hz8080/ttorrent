@@ -98,13 +98,13 @@ public class Client extends Observable implements Runnable,
 
 	private static final String BITTORRENT_ID_PREFIX = "-TO0042-";
 
-	private SharedTorrent torrent;
+	private final SharedTorrent torrent;
 	private ClientState state;
 	private Peer self;
 
 	private Thread thread;
 	private boolean stop;
-	private long seed;
+	private long seed; // 这个到底是干哈的
 
 	private ConnectionHandler service;
 	private Announce announce;
@@ -120,7 +120,7 @@ public class Client extends Observable implements Runnable,
 	 * @param torrent The torrent to download and share.
 	 */
 	public Client(InetAddress address, SharedTorrent torrent)
-		throws UnknownHostException, IOException {
+		throws IOException {
 		this.torrent = torrent;
 		this.state = ClientState.WAITING;
 
@@ -321,7 +321,7 @@ public class Client extends Observable implements Runnable,
 		// First, analyze the torrent's local data.
 		try {
 			this.setState(ClientState.VALIDATING);
-			this.torrent.init();
+			this.torrent.init(); // 特么这部分终于看完了
 		} catch (IOException ioe) {
 			logger.warn("Error while initializing torrent data: {}!",
 				ioe.getMessage(), ioe);
@@ -734,7 +734,7 @@ public class Client extends Observable implements Runnable,
 			channel.socket().getPort(),
 			(peerId != null
 				? ByteBuffer.wrap(peerId)
-				: (ByteBuffer)null));
+				: null));
 
 		logger.info("Handling new peer connection with {}...", search);
 		SharingPeer peer = this.getOrCreatePeer(search);

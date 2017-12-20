@@ -57,7 +57,7 @@ public abstract class TrackerMessage {
 		public int getId() {
 			return this.id;
 		}
-	};
+	}
 
 	private final Type type;
 	private final ByteBuffer data;
@@ -121,7 +121,7 @@ public abstract class TrackerMessage {
 	 */
 	public interface ConnectionRequestMessage {
 
-	};
+	}
 
 
 	/**
@@ -136,7 +136,7 @@ public abstract class TrackerMessage {
 	 */
 	public interface ConnectionResponseMessage {
 
-	};
+	}
 
 
 	/**
@@ -151,7 +151,7 @@ public abstract class TrackerMessage {
 	 */
 	public interface AnnounceRequestMessage {
 
-		public static final int DEFAULT_NUM_WANT = 50;
+		int DEFAULT_NUM_WANT = 50;
 
 		/**
 		 * Announce request event types.
@@ -171,7 +171,7 @@ public abstract class TrackerMessage {
 		 * refresh this peer's status and acknowledge that it is still there.
 		 * </p>
 		 */
-		public enum RequestEvent {
+		enum RequestEvent {
 			NONE(0),
 			COMPLETED(1),
 			STARTED(2),
@@ -207,23 +207,23 @@ public abstract class TrackerMessage {
 				}
 				return null;
 			}
-		};
+		}
 
-		public byte[] getInfoHash();
-		public String getHexInfoHash();
-		public byte[] getPeerId();
-		public String getHexPeerId();
-		public int getPort();
-		public long getUploaded();
-		public long getDownloaded();
-		public long getLeft();
-		public boolean getCompact();
-		public boolean getNoPeerIds();
-		public RequestEvent getEvent();
+		byte[] getInfoHash();
+		String getHexInfoHash();
+		byte[] getPeerId();
+		String getHexPeerId();
+		int getPort();
+		long getUploaded();
+		long getDownloaded();
+		long getLeft();
+		boolean getCompact();
+		boolean getNoPeerIds();
+		RequestEvent getEvent();
 
-		public String getIp();
-		public int getNumWant();
-	};
+		String getIp();
+		int getNumWant();
+	}
 
 
 	/**
@@ -238,11 +238,11 @@ public abstract class TrackerMessage {
 	 */
 	public interface AnnounceResponseMessage {
 
-		public int getInterval();
-		public int getComplete();
-		public int getIncomplete();
-		public List<Peer> getPeers();
-	};
+		int getInterval();
+		int getComplete();
+		int getIncomplete();
+		List<Peer> getPeers();
+	}
 
 
 	/**
@@ -266,7 +266,7 @@ public abstract class TrackerMessage {
 		 * announce request from a BitTorrent client.
 		 * </p>
 		 */
-		public enum FailureReason {
+		enum FailureReason {
 			UNKNOWN_TORRENT("The requested torrent does not exist on this tracker"),
 			MISSING_HASH("Missing info hash"),
 			MISSING_PEER_ID("Missing peer ID"),
@@ -283,8 +283,8 @@ public abstract class TrackerMessage {
 			public String getMessage() {
 				return this.message;
 			}
-		};
+		}
 
-		public String getReason();
-	};
+		String getReason();
+	}
 }

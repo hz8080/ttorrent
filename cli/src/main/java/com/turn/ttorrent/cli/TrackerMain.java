@@ -76,7 +76,7 @@ public class TrackerMain {
 		}
 
 		Integer portValue = (Integer)parser.getOptionValue(port,
-			Integer.valueOf(Tracker.DEFAULT_TRACKER_PORT));
+				Tracker.DEFAULT_TRACKER_PORT);
 
 		String[] otherArgs = parser.getRemainingArgs();
 
@@ -99,7 +99,7 @@ public class TrackerMain {
 		};
 
 		try {
-			Tracker t = new Tracker(new InetSocketAddress(portValue.intValue()));
+			Tracker t = new Tracker(new InetSocketAddress( portValue));
 
 			File parent = new File(directory);
 			for (File f : parent.listFiles(filter)) {

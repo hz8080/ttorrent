@@ -175,7 +175,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 	 * @throws IOException If the torrent file cannot be read or decoded.
 	 */
 	public SharedTorrent(byte[] torrent, File destDir)
-		throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+		throws IOException, NoSuchAlgorithmException {
 		this(torrent, destDir, false);
 	}
 
@@ -191,7 +191,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 	 * @throws IOException If the torrent file cannot be read or decoded.
 	 */
 	public SharedTorrent(byte[] torrent, File parent, boolean seeder)
-		throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+		throws IOException, NoSuchAlgorithmException {
 		this(torrent, parent, seeder, DEFAULT_REQUEST_STRATEGY);
 	}
 
@@ -209,7 +209,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 	 */
 	public SharedTorrent(byte[] torrent, File parent, boolean seeder,
 			RequestStrategy requestStrategy)
-		throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+		throws IOException, NoSuchAlgorithmException {
 		super(torrent, seeder);
 
 		if (parent == null || !parent.isDirectory()) {
@@ -274,7 +274,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 	 * @throws IOException When the torrent file cannot be read or decoded.
 	 */
 	public static SharedTorrent fromFile(File source, File parent)
-		throws IOException, NoSuchAlgorithmException {
+			throws IOException, NoSuchAlgorithmException {
 		byte[] data = FileUtils.readFileToByteArray(source);
 		return new SharedTorrent(data, parent);
 	}
@@ -383,7 +383,7 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 				new Object[] { this.getName(), threads, nPieces });
 			for (int idx=0; idx<nPieces; idx++) {
 				byte[] hash = new byte[Torrent.PIECE_HASH_SIZE];
-				this.piecesHashes.get(hash);
+				this.piecesHashes.get(hash); // 这个方法调用之后，buffer中数据会放入hash，且buffer的position会前进 目标数组的length
 
 				// The last piece may be shorter than the torrent's global piece
 				// length. Let's make sure we get the right piece length in any
@@ -400,10 +400,10 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 				results.add(executor.submit(hasher));
 
 				if (results.size() >= threads) {
-					this.validatePieces(results);
+					this.validatePieces(results); // 校验后的list会清空
 				}
 
-				if (idx / (float)nPieces * 100f > step) {
+				if (idx / (float)nPieces * 100f > step) { // 每百分之十记录一次, 这个记录方法其实有问题，idx / nPieces如果第一次超过 10% 完成度就不准了
 					logger.info("  ... {}% complete", step);
 					step += 10;
 				}
@@ -437,7 +437,8 @@ public class SharedTorrent extends Torrent implements PeerActivityListener {
 	}
 
 	/**
-	 * Process the pieces enqueued for hash validation so far.
+	 * Process the pieces enqueued for hash validation so far.、
+	 * 这里将有效的piece统计起来，并计算剩余的未下载大小
 	 *
 	 * @param results The list of {@link Future}s of pieces to process.
 	 */

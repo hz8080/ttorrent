@@ -135,8 +135,7 @@ public class TorrentMain {
 
 		if (Boolean.TRUE.equals(createFlag) &&
 			(otherArgs.length != 1 || announceURLs.isEmpty())) {
-			usage(System.err, "Announce URL and a file or directory must be " +
-				"provided to create a torrent file!");
+			usage(System.err, "Announce URL and a file or directory must be provided to create a torrent file!");
 			System.exit(1);
 		}
 		

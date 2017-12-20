@@ -104,6 +104,7 @@ public class Announce implements Runnable {
 			}
 
 			// Shuffle the list of tracker clients once on creation.
+			// 第一次启动的时候 调用Collections#shuffle(List<?> list)打乱
 			Collections.shuffle(tierClients);
 
 			// Tier is guaranteed to be non-empty by

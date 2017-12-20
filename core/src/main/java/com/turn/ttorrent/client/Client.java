@@ -695,6 +695,7 @@ public class Client extends Observable implements Runnable,
 			//	   of connecting to peers that need to download
 			//     something).
 			SharingPeer match = this.getOrCreatePeer(peer);
+			// 如果文件已经下载好，就不需要这些peer
 			if (this.isSeed()) {
 				continue;
 			}

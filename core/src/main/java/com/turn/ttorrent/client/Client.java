@@ -141,7 +141,7 @@ public class Client extends Observable implements Runnable,
 		// Initialize the announce request thread, and register ourselves to it
 		// as well.
 		this.announce = new Announce(this.torrent, this.self);
-		this.announce.register(this);
+		this.announce.register(this);// 会把监听器塞到所有TrackClient
 
 		logger.info("BitTorrent client [{}] for {} started and " +
 			"listening at {}:{}...",
@@ -674,7 +674,7 @@ public class Client extends Observable implements Runnable,
 	 * any other means like DHT/PEX, etc.).
 	 */
 	@Override
-	public void handleDiscoveredPeers(List<Peer> peers) {
+	public void  handleDiscoveredPeers(List<Peer> peers) {
 		if (peers == null || peers.isEmpty()) {
 			// No peers returned by the tracker. Apparently we're alone on
 			// this one for now.

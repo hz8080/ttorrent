@@ -153,6 +153,7 @@ public class HTTPAnnounceResponseMessage extends HTTPTrackerMessage
 	 */
 	private static List<Peer> toPeerList(byte[] data)
 		throws InvalidBEncodingException, UnknownHostException {
+		// ip + port 的 字节数是 4 + 2 = 6 字节
 		if (data.length % 6 != 0) {
 			throw new InvalidBEncodingException("Invalid peers " +
 				"binary information string!");
@@ -163,11 +164,9 @@ public class HTTPAnnounceResponseMessage extends HTTPTrackerMessage
 
 		for (int i=0; i < data.length / 6 ; i++) {
 			byte[] ipBytes = new byte[4];
-			peers.get(ipBytes);
+			peers.get(ipBytes); // 这里消费4个字节即一个ip
 			InetAddress ip = InetAddress.getByAddress(ipBytes);
-			int port =
-				(0xFF & (int)peers.get()) << 8 |
-				(0xFF & (int)peers.get());
+			int port = (0xFF & (int)peers.get()) << 8 | (0xFF & (int)peers.get()) ;
 			result.add(new Peer(new InetSocketAddress(ip, port)));
 		}
 

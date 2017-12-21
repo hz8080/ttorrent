@@ -107,7 +107,7 @@ public abstract class TrackerClient {
 	 * <p>
 	 * Analyzes the response from the tracker and acts on it. If the response
 	 * is an error, it is logged. Otherwise, the announce response is used
-	 * to fire the corresponding announce and peer events to all announce
+	 * to fire the corresponding（相应的） announce and peer events to all announce
 	 * listeners.
 	 * </p>
 	 *

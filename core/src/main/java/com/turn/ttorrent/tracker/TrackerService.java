@@ -102,6 +102,7 @@ public class TrackerService implements Container {
 	 * @param request The incoming HTTP request.
 	 * @param response The response object.
 	 */
+	@Override
 	public void handle(Request request, Response response) {
 		// Reject non-announce requests
 		if (!Tracker.ANNOUNCE_URL.equals(request.getPath().toString())) {
@@ -124,6 +125,7 @@ public class TrackerService implements Container {
 
 	/**
 	 * Process the announce request.
+	 * 将可用的peer响应给客户端
 	 *
 	 * <p>
 	 * This method attemps to read and parse the incoming announce request into

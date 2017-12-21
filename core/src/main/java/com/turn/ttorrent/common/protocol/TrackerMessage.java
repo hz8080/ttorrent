@@ -238,9 +238,24 @@ public abstract class TrackerMessage {
 	 */
 	public interface AnnounceResponseMessage {
 
+		/**
+		 * @return interval
+		 */
 		int getInterval();
+
+		/**
+		 * @return complete peer count
+		 */
 		int getComplete();
+
+		/**
+		 * @return incomplete peer count
+		 */
 		int getIncomplete();
+
+		/**
+		 * @return available peer list
+		 */
 		List<Peer> getPeers();
 	}
 

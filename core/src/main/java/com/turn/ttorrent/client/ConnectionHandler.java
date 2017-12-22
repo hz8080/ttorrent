@@ -493,6 +493,7 @@ public class ConnectionHandler implements Runnable {
 				}
 
 				logger.debug("Connected. Sending handshake to {}...", this.peer);
+				// configure blocking before send handshake msg
 				channel.configureBlocking(true);
 				int sent = this.handler.sendHandshake(channel);
 				logger.debug("Sent handshake ({} bytes), waiting for response...", sent);

@@ -509,6 +509,7 @@ public class Client extends Observable implements Runnable,
 			if (search.hasPeerId()) {
 				peer = this.peers.get(search.getHexPeerId());
 				if (peer != null) {
+					// update peer
 					logger.trace("Found peer (by peer ID): {}.", peer);
 					this.peers.put(peer.getHostIdentifier(), peer);
 					this.peers.put(search.getHostIdentifier(), peer);
@@ -516,6 +517,7 @@ public class Client extends Observable implements Runnable,
 				}
 			}
 
+			// update peerId for peer by host
 			peer = this.peers.get(search.getHostIdentifier());
 			if (peer != null) {
 				if (search.hasPeerId()) {
@@ -529,6 +531,7 @@ public class Client extends Observable implements Runnable,
 				return peer;
 			}
 
+			// create peer
 			peer = new SharingPeer(search.getIp(), search.getPort(),
 				search.getPeerId(), this.torrent);
 			logger.trace("Created new peer: {}.", peer);
@@ -617,6 +620,7 @@ public class Client extends Observable implements Runnable,
 
 		// We're interested in the top downloaders first, so use a descending
 		// set.
+		// set的时候进行了根据下载速度/上传速度排序，然后这里取倒序
 		for (SharingPeer peer : bound.descendingSet()) {
 			if (downloaders < Client.MAX_DOWNLOADERS_UNCHOKE) {
 				// Unchoke up to MAX_DOWNLOADERS_UNCHOKE interested peers
@@ -730,6 +734,7 @@ public class Client extends Observable implements Runnable,
 	 */
 	@Override
 	public void handleNewPeerConnection(SocketChannel channel, byte[] peerId) {
+		// 目标peer
 		Peer search = new Peer(
 			channel.socket().getInetAddress().getHostAddress(),
 			channel.socket().getPort(),

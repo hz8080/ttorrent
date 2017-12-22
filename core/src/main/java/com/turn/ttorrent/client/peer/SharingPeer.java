@@ -771,7 +771,7 @@ public class SharingPeer extends Peer implements MessageListener {
 	 * @author mpetazzoni
 	 * @see Rate#RATE_COMPARATOR
 	 */
-	public static class ULRateComparator
+	public static class  ULRateComparator
 			implements Comparator<SharingPeer>, Serializable {
 
 		private static final long serialVersionUID = 38794949747717L;
